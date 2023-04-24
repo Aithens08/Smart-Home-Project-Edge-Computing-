@@ -1,14 +1,14 @@
 # Smart-Home-Project-Edge-Computing-
 DIY Smart home project developed for the Edge Computing classe
 
-### Bluetooth comunication between Arduino and Android
+## Connexion to the home server
 
 
 
-### Actual state of the project
+## Actual state of the project
 
 
 
-### Next Steps
+## Next Steps
 
 
