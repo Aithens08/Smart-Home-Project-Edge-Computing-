@@ -1,4 +1,3 @@
-#include <SoftwareSerial.h>
 #include <ArduinoJson.h>
 #include <Wire.h>
 #include <Servo.h> 
@@ -9,7 +8,6 @@ const int temp_sensor_address = 0x48;  // Set the I2C address of the temperature
 const int fan_pin = A5; // Arduino pin for the fan
 const int servo_pin = 3; // Arduino pin for the servo 
 
-SoftwareSerial BTSerial(50, 51);
 Servo Servo1; // Create the servo Object
 
 float temp_celsius;
@@ -17,13 +15,11 @@ int light;
 int fan_status = 0;
 int curtain_status = 0;
 unsigned long previousMillis = 0;
-const long interval = 30000;
+const long interval = 5000;
 
 void setup() {
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
-  // Open serial communication for the Bluetooth Serial Port
-  BTSerial.begin(115200);
   // Initialize the I2C bus
   Wire.begin();
 
@@ -35,9 +31,9 @@ void loop() {
   // put your main code here, to run repeatedly:
   unsigned long currentMillis = millis();
 
-  if (BTSerial.available())
+  if (Serial.available())
   {
-    String receivedString = BTSerial.readString();
+    String receivedString = Serial.readString();
     if (receivedString.charAt(0) == '1')
     {
       if (receivedString.charAt(2) == '0')
@@ -93,8 +89,6 @@ void loop() {
       light_data[0] = Wire.read(); // Read the first byte
       light_data[1] = Wire.read(); // Read the second byte
       light = ((light_data[0] << 8) | light_data[1]); // Combine the two bytes to get the light level
-      Serial.print("Light level: ");
-      Serial.println(light); // Print the light level to the serial monitor
     }
 
     // Read temperature sensor data
@@ -112,9 +106,6 @@ void loop() {
       temp_data[1] = Wire.read(); // Read the second byte
       int temp = ((temp_data[0] << 8) | temp_data[1]); // Combine the two bytes to get the temperature
       temp_celsius = (temp / 256.0); // Convert the temperature to Celsius
-      Serial.print("Temperature: ");
-      Serial.print(temp_celsius);
-      Serial.println(" C"); // Print the temperature to the serial monitor
     }
 
     // create a new JSON object
@@ -129,6 +120,6 @@ void loop() {
     serializeJson(doc, jsonString);
 
     // send the JSON string to the Bluetooth module
-    BTSerial.println(jsonString);
+    Serial.println(jsonString);
   }
 }
