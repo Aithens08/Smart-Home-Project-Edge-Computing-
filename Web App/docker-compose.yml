@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  mongo:
+   container_name: mongo
+   image: mongo
+   volumes:
+     - ./data:/data/db
+   ports:
+     - '27012:27017'
+
+  mongo-express:
+   container_name: mongo-express
+   image: mongo-express
+   ports:
+     - '8081:8081'
